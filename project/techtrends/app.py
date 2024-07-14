@@ -10,6 +10,33 @@ def get_db_connection():
     connection.row_factory = sqlite3.Row
     return connection
 
+#Healthcheck
+def health_check():
+    return jsonify({
+        'status': 'OK - healthy'
+    }), 200
+
+
+
+#metrics
+def metrics():
+    try:
+        post_count = Post.query.count()
+        db_connection_count = 1  # Example: Replace with actual logic to count database connections
+        response = {
+            'db_connection_count': db_connection_count,
+            'post_count': post_count
+        }
+            return jsonify(response), 200
+
+    except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+
+#logs
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
 # Function to get a post using its ID
 def get_post(post_id):
     connection = get_db_connection()
